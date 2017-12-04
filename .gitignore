@@ -1,0 +1,9 @@
+*.pyc
+*.pyo
+*.so
+*.class
+*~
+*.egg-info/
+build/
+dist/
+test.py
