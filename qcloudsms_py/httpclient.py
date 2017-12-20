@@ -57,6 +57,8 @@ class HTTPResponse(object):
         return False
 
     def json(self):
+        if sys.version_info >= (3, ) and sys.version_info < (3, 6):
+            return json.loads(self.body.decode("utf-8"), encoding="utf=8")
         return json.loads(self.body, encoding="utf-8")
 
 
