@@ -11,7 +11,7 @@ from qcloudsms_py.voice import SmsVoiceVerifyCodeSender, SmsVoicePromptSender
 
 
 # human-readable version number
-version = "0.1.0"
+version = "0.1.1"
 
 # three-tuple for programmatic comparison
-version_info = (0, 1, 0)
+version_info = (0, 1, 1)
