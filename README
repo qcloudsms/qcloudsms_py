@@ -128,7 +128,7 @@ from qcloudsms_py.httpclient import HTTPError
 msender = SmsMultiSender(appid, appkey)
 params = ["指定模板群发", "深圳", "小明"]
 try:
-    result = msender.send_with_param(86, phone_numbers[0],
+    result = msender.send_with_param(86, phone_numbers,
         template_id, params)
 except HTTPError as e:
     print(e)
