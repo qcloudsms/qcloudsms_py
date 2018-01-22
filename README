@@ -69,9 +69,11 @@ pip install qcloudsms_py
 1. 手动下载或clone最新版本qcloudsms_py代码
 2. 在qcloudsms_py目录运行 `python setup.py install`或直接把qcloudsms_py所在目录加入`sys.path`
 
+> `Note` python2/python3都支持
+
 ## 用法
 
-> 若您对接口存在疑问，可以查阅[API开发指南](https://cloud.tencent.com/document/product/382/5808)、[API文档](https://qcloudsms.github.io/qcloudsms_py/)和[错误码](https://cloud.tencent.com/document/product/382/3771)。
+若您对接口存在疑问，可以查阅[API开发指南](https://cloud.tencent.com/document/product/382/5808)、[API文档](https://qcloudsms.github.io/qcloudsms_py/) 和 [错误码](https://cloud.tencent.com/document/product/382/3771)。
 
 - **准备必要参数**
 
@@ -80,16 +82,16 @@ pip install qcloudsms_py
 appid = 1400009099  # SDK AppID是1400开头
 
 # 短信应用SDK AppKey
-appkey = "9ff91d87c2cd7cd0ea762f141975d1df37481d48700d70ac37470aefc60f9bad";
+appkey = "9ff91d87c2cd7cd0ea762f141975d1df37481d48700d70ac37470aefc60f9bad"
 
 # 需要发送短信的手机号码
-phone_numbers = ["21212313123", "12345678902", "12345678903"];
+phone_numbers = ["21212313123", "12345678902", "12345678903"]
 
 # 短信模板ID，需要在短信应用中申请
 template_id = 7839  # NOTE: 这里的模板ID`7839`只是一个示例，真实的模板ID需要在短信控制台中申请
 
 # 签名
-sms_sign = "腾讯云"  # NOTE: 这里的签名只是示例，请使用真实的已申请的签名, 签名参数使用的是`签名内容`，而不是`签名ID`
+sms_sign = "腾讯云"  # NOTE: 这里的签名"腾讯云"只是一个示例，真实的签名需要在短信控制台中申请，另外签名参数使用的是`签名内容`，而不是`签名ID`
 ```
 
 - **单发短信**
@@ -98,9 +100,10 @@ sms_sign = "腾讯云"  # NOTE: 这里的签名只是示例，请使用真实的
 from qcloudsms_py import SmsSingleSender
 from qcloudsms_py.httpclient import HTTPError
 
+sms_type = 0  # Enum{0: 普通短信, 1: 营销短信}
 ssender = SmsSingleSender(appid, appkey)
 try:
-    result = ssender.send(0, 86, phone_numbers[0],
+    result = ssender.send(sms_type, 86, phone_numbers[0],
         "【腾讯云】您的验证码是: 5678", extend="", ext="")
 except HTTPError as e:
     print(e)
@@ -132,7 +135,7 @@ except Exception as e:
 print(result)
 ```
 
-> `Note:`无论单发短信还是指定模板ID单发短信都需要从控制台中申请模板并且模板已经审核通过，才可能下发成功，否则返回失败。
+> `Note` 无论单发/群发短信还是指定模板ID单发/群发短信都需要从控制台中申请模板并且模板已经审核通过，才可能下发成功，否则返回失败。
 
 - **群发**
 
@@ -140,9 +143,10 @@ print(result)
 from qcloudsms_py import SmsMultiSender
 from qcloudsms_py.httpclient import HTTPError
 
+sms_type = 0  # Enum{0: 普通短信, 1: 营销短信}
 msender = SmsMultiSender(appid, appkey)
 try:
-    result = msender.send(0, "86", phone_numbers,
+    result = msender.send(sms_type, "86", phone_numbers,
         "【腾讯云】您的验证码是: 5678", extend="", ext="")
 except HTTPError as e:
     print(e)
@@ -164,7 +168,7 @@ msender = SmsMultiSender(appid, appkey)
 params = ["5678"]
 try:
     result = msender.send_with_param(86, phone_numbers,
-        template_id, params, sign=sms_sign, extend="", ext="")
+        template_id, params, sign=sms_sign, extend="", ext="")   # 签名参数未提供或者为空时，会使用默认签名发送短信
 except HTTPError as e:
     print(e)
 except Exception as e:
@@ -194,7 +198,7 @@ except Exception as e:
 print(result)
 ```
 
-> `Note` 语音验证码发送只需提供验证码数字，例如在msg=“5678”，您收到的语音通知为“您的语音验证码是5678”，如需自定义内容，可以使用语音通知。
+> `Note` 语音验证码发送只需提供验证码数字，例如当msg=“5678”时，您收到的语音通知为“您的语音验证码是5678”，如需自定义内容，可以使用语音通知。
 
 
 - **发送语音通知**
@@ -205,7 +209,7 @@ from qcloudsms_py.httpclient import HTTPError
 
 vpsender = SmsVoicePromptSender(appid, appkey)
 try:
-    result = vpsender.send("86", phone_numbers[0], 2, "1234",
+    result = vpsender.send("86", phone_numbers[0], 2, "5678",
         playtimes=2, ext="")
 except HTTPError as e:
     print(e)
@@ -250,7 +254,6 @@ end_time = 1511841600    # 结束时间(unix timestamp)
 max_num = 10             # 单次拉取最大量
 mspuller = SmsMobileStatusPuller(appid, appkey)
 try:
-
     # 拉取短信回执
     callback_result = mspuller.pull_callback("86", phone_numbers[0],
         begin_time, end_time, max_num)
