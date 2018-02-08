@@ -83,7 +83,7 @@ class SmsVoiceVerifyCodeSender(object):
                     "nationcode": str(nation_code),
                     "mobile": str(phone_number)
                 },
-                "msg": "msg",
+                "msg": msg,
                 "playtimes": int(playtimes),
                 "sig": util.calculate_signature(
                     self._appkey, rand, now, [phone_number]),
