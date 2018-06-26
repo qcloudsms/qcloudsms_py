@@ -282,7 +282,7 @@ print(reply_result)
 from qcloudsms_py import VoiceFileUploader
 from qcloudsms_py.httpclient import HTTPError
 
-with open("/path/to/example.mp3") as f:
+with open("/path/to/example.mp3", "rb") as f:
     content = f.read()
 uploader = VoiceFileUploader(appid, appkey)
 try:
@@ -330,7 +330,7 @@ from qcloudsms_py.httpclient import HTTPError
 template_id = 12345
 params = ["5678"]
 tvsender = TtsVoiceSender(appid, appkey)
-try:
+Try:
     result = tvsender.send(template_id, params, phone_numbers[0],
         nationcode="86", playtimes=2, ext="")
 except HTTPError as e:
@@ -339,4 +339,45 @@ except Exception as e:
     print(e)
 
 print(result)
+```
+
+#### 使用代理
+
+有的环境需要使用代理才能上网，可以指定HTTPSimpleClient的proxy参数来实现, 示例如下:
+
+```python
+from qcloudsms_py import SmsSingleSender
+from qcloudsms_py.httpclient import HTTPSimpleClient, HTTPError
+
+httpclient = HTTPSimpleClient(proxy="www.proxysever.com:8080")
+ssender = SmsSingleSender(appid, appkey, httpclient=httpclient)
+template_id = 7839
+params = ["5678"]
+try:
+    result = ssender.send_with_param(86, phone_numbers[0],
+        template_id, params, sign=sms_sign, extend="", ext="")
+except HTTPError as e:
+    print(e)
+except Exception as e:
+    print(e)
+
+print(result)
+```
+
+#### 统一创建对象
+
+短信和语音各类的对象可以通过 `qcloudsms_py.QcloudSms` 统一创建，这种
+方式可以避免创建对象时多次传入参数`appid` 和 `appkey`, 示例如下:
+
+```python
+from qcloudsms_py import QcloudSms
+
+# 创建QcloudSms对象
+qcloudsms = QcloudSms(appid, appkey)
+
+# 创建单发短信(SmsSingleSender)对象
+ssender = qcloudsms.SmsSingleSender()
+
+# 创建上传语音文件(VoiceFileUploader)对象
+uploader = qcloudsms.VoiceFileUploader()
 ```
