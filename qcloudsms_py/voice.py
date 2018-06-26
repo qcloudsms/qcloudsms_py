@@ -25,7 +25,7 @@ class PromptVoiceSender(object):
     def __init__(self, appid, appkey, httpclient=None):
         self._appid = appid
         self._appkey = appkey
-        self._url = "https://cloud-test.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt"
+        self._url = "https://cloud.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt"
         self._httpclient = httpclient
 
     def send(self, nationcode, phone_number, prompttype,
