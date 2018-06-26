@@ -3,6 +3,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import re
 import json
 import sys
 import socket
@@ -17,8 +18,7 @@ else:
 
 class HTTPRequest(object):
 
-     def __init__(self, url, method="GET", headers=None, body=None,
-                  connect_timeout=None, request_timeout=None):
+     def __init__(self, url, method="GET", headers=None, body=None):
          """
          :param url: HTTP request URL.
          :param method:  (optiona) HTTP method.
@@ -31,13 +31,12 @@ class HTTPRequest(object):
          self.method = method
          self.headers = headers
          self.body = body
-         self.connect_timeout = connect_timeout
-         self.request_timeout = request_timeout
 
 
 class HTTPResponse(object):
 
-    def __init__(self, request, code, body, headers=None, reason=None):
+    def __init__(self, request, code, body,
+                 headers=None, reason=None):
         """
          :param request: HTTPRequest instance.
          :param code:  HTTP status code.
@@ -58,7 +57,8 @@ class HTTPResponse(object):
 
     def json(self):
         if sys.version_info >= (3, ) and sys.version_info < (3, 6):
-            return json.loads(self.body.decode("utf-8"), encoding="utf=8")
+            return json.loads(self.body.decode("utf-8"),
+                              encoding="utf=8")
         return json.loads(self.body, encoding="utf-8")
 
 
@@ -99,46 +99,81 @@ def utf8(value):
     return value.encode("utf-8")
 
 
+class HTTPClientInterface(object):
 
-def http_fetch(req):
-    """Fetch HTTP response by given HTTP request.
+    def fetch(self, req):
+        raise NotImplementedError
 
-    :param req: HTTPRequest instance
-    """
-    result = urlparse.urlparse(req.url)
-    if result.scheme == "https":
-        conn = httplib.HTTPSConnection(
-            result.hostname,
-            port=result.port,
-            timeout=req.connect_timeout
-        )
-    else:
-        conn = httplib.HTTPConnection(
-            result.hostname,
-            port=result.port,
-            timeout=req.connect_timeout
-        )
-    try:
-        conn.request(
-            req.method,
-            "{}?{}".format(result.path, result.query),
-            body=utf8(json.dumps(req.body)),
-            headers=req.headers
-        )
-        response = conn.getresponse()
-        res = HTTPResponse(
-            request=req,
-            code=response.status,
-            body=response.read(),
-            headers=dict(response.getheaders()),
-            reason=response.reason
-        )
-    except socket.gaierror:
-        # client network error, raise
-        raise
-    except OSError:
-        # client network error, raise
-        raise
-    finally:
-        conn.close()
-    return res
+
+class HTTPSimpleClient(HTTPClientInterface):
+
+    PATTERN = "(?:http.*://)?(?P<host>[^:/ ]+).?(?P<port>[0-9]*).*"
+
+    def __init__(self, connect_timeout=60, request_timeout=60,
+                 proxy=None):
+        self._connect_timeout = connect_timeout
+        self._request_timeout = request_timeout
+        if isinstance(proxy, (list, tuple)):
+            self._proxy = (proxy[0], int(proxy[1]))
+        elif isinstance(proxy, (bytes, unicode_type)):
+            proxy = utf8(proxy)
+            result = re.search(self.__class__.PATTERN, proxy)
+            if not result:
+                raise ValueError("invalid proxy")
+            self._proxy = (
+                result.group("host"),
+                int(result.group("port")) if result.group("port") else 80
+            )
+        elif proxy is None:
+            self._proxy = None
+        else:
+            raise ValueError("invalid proxy")
+
+    def fetch(self, req):
+        result = urlparse.urlparse(req.url)
+        if self._proxy:
+            host, port = self._proxy
+        else:
+            host, port = (result.hostname, result.port)
+
+        if result.scheme == "https":
+            conn = httplib.HTTPSConnection(
+                host,
+                port=port,
+                timeout=self._connect_timeout
+            )
+        else:
+            conn = httplib.HTTPConnection(
+                host,
+                port=port,
+                timeout=self._connect_timeout
+            )
+
+        if self._proxy:
+            conn.set_tunnel(result.hostname, result.port)
+
+        # Send request
+        try:
+            conn.request(
+                req.method,
+                "{}?{}".format(result.path, result.query),
+                body=utf8(req.body),
+                headers=req.headers
+            )
+            response = conn.getresponse()
+            res = HTTPResponse(
+                request=req,
+                code=response.status,
+                body=response.read(),
+                headers=dict(response.getheaders()),
+                reason=response.reason
+            )
+        except socket.gaierror:
+            # client network error, raise
+            raise
+        except OSError:
+            # client network error, raise
+            raise
+        finally:
+            conn.close()
+        return res

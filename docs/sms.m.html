@@ -1118,35 +1118,45 @@ table {
 <span class="kn">from</span> <span class="nn">qcloudsms_py.httpclient</span> <span class="kn">import</span> <span class="n">HTTPRequest</span>
 
 
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;SmsSingleSender&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SmsMultiSender&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SmsStatusPuller&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SmsMobileStatusPuller&quot;</span>
+<span class="p">]</span>
+
+
 <span class="k">class</span> <span class="nc">SmsSingleSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/sendsms&quot;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/sendsms&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
-             <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+             <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send single SMS message.</span>
 
 <span class="sd">        :param msg_type: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param phone_number: phone number</span>
 <span class="sd">        :param msg: SMS message content</span>
 <span class="sd">        :param extend: extend field, default is empty string</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                     <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sms_type</span><span class="p">),</span>
@@ -1156,35 +1166,34 @@ table {
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
-                        <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
+                        <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send single SMS message with template paramters.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param phone_number: phone number</span>
 <span class="sd">        :param template_id: template id</span>
 <span class="sd">        :param params: template parameters</span>
 <span class="sd">        :param sign: Sms user sign</span>
 <span class="sd">        :param extend: extend field, default is empty string</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                     <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;sign&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">sign</span><span class="p">),</span>
@@ -1195,42 +1204,42 @@ table {
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
 
 
 <span class="k">class</span> <span class="nc">SmsMultiSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/sendmultisms2&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
-             <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+             <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a SMS messages to multiple phones at once.</span>
 
 <span class="sd">        :param number: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param phone_numbers: phone number array</span>
 <span class="sd">        :param msg: SMS message content</span>
 <span class="sd">        :param extend: extend field, default is empty string</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nation_code</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nationcode</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
                         <span class="k">for</span> <span class="n">pn</span> <span class="ow">in</span> <span class="n">phone_numbers</span><span class="p">],</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sms_type</span><span class="p">),</span>
                 <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
@@ -1239,36 +1248,35 @@ table {
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
-                        <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
+                        <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Send a SMS messages with template parameters to multiple</span>
 <span class="sd">        phones at once.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param phone_numbers: multiple phone numbers</span>
 <span class="sd">        :param template_id: template id</span>
 <span class="sd">        :param params: template parameters</span>
 <span class="sd">        :param sign: Sms user sign</span>
 <span class="sd">        :param extend: extend field, default is empty string</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nation_code</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nationcode</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
                         <span class="k">for</span> <span class="n">pn</span> <span class="ow">in</span> <span class="n">phone_numbers</span><span class="p">],</span>
                 <span class="s2">&quot;sign&quot;</span><span class="p">:</span> <span class="n">sign</span><span class="p">,</span>
                 <span class="s2">&quot;tpl_id&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">template_id</span><span class="p">),</span>
@@ -1278,87 +1286,90 @@ table {
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">SmsStatusPuller</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/pullstatus&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">_pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull SMS message status.</span>
 
 <span class="sd">        :param msg_type: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="k">else</span> <span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">),</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">sms_type</span><span class="p">,</span>
                 <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">max_num</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull callback SMS messages status.</span>
 
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull reply SMS messages status.</span>
 
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">SmsMobileStatusPuller</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span><span class="p">;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span><span class="p">;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/pullstatus4mobile&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">_pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
+              <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull SMS messages status for single mobile.</span>
 
 <span class="sd">        :param msg_type: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param mobile: mobile number</span>
 <span class="sd">        :param begin_time: begin time, unix timestamp</span>
 <span class="sd">        :param end_time: end time, unix timestamp</span>
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">),</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">msg_type</span><span class="p">,</span>
@@ -1366,39 +1377,39 @@ table {
                 <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">max_num</span><span class="p">,</span>
                 <span class="s2">&quot;begin_time&quot;</span><span class="p">:</span> <span class="n">begin_time</span><span class="p">,</span>
                 <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">,</span>
-                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                 <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">mobile</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
-                      <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
+                      <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull callback SMS message status for single mobile.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param mobile: mobile number</span>
 <span class="sd">        :param begin_time: begin time, unix timestamp</span>
 <span class="sd">        :param end_time: end time, unix timestamp</span>
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
-                          <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
+                          <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
-                   <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
+                   <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull reply SMS message status for single mobile.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param mobile: mobile number</span>
 <span class="sd">        :param begin_time: begin time, unix timestamp</span>
 <span class="sd">        :param end_time: end time, unix timestamp</span>
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
-                          <span class="n">begin_time</span><span class="p">,</span><span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
+                          <span class="n">begin_time</span><span class="p">,</span><span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1419,30 +1430,33 @@ table {
   <div id="source-qcloudsms_py.sms.SmsMobileStatusPuller" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SmsMobileStatusPuller</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span><span class="p">;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span><span class="p">;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/pullstatus4mobile&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">_pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
+              <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull SMS messages status for single mobile.</span>
 
 <span class="sd">        :param msg_type: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param mobile: mobile number</span>
 <span class="sd">        :param begin_time: begin time, unix timestamp</span>
 <span class="sd">        :param end_time: end time, unix timestamp</span>
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">),</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">msg_type</span><span class="p">,</span>
@@ -1450,39 +1464,39 @@ table {
                 <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">max_num</span><span class="p">,</span>
                 <span class="s2">&quot;begin_time&quot;</span><span class="p">:</span> <span class="n">begin_time</span><span class="p">,</span>
                 <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">,</span>
-                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                 <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">mobile</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
-                      <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
+                      <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull callback SMS message status for single mobile.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param mobile: mobile number</span>
 <span class="sd">        :param begin_time: begin time, unix timestamp</span>
 <span class="sd">        :param end_time: end time, unix timestamp</span>
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
-                          <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
+                          <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
-                   <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
+                   <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull reply SMS message status for single mobile.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param mobile: mobile number</span>
 <span class="sd">        :param begin_time: begin time, unix timestamp</span>
 <span class="sd">        :param end_time: end time, unix timestamp</span>
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
-                          <span class="n">begin_time</span><span class="p">,</span><span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
+                          <span class="n">begin_time</span><span class="p">,</span><span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1499,7 +1513,7 @@ table {
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsMobileStatusPuller.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
     </div>
     
 
@@ -1508,10 +1522,11 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsMobileStatusPuller.__init__', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsMobileStatusPuller.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span><span class="p">;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span><span class="p">;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/pullstatus4mobile&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 </pre></div>
 
   </div>
@@ -1522,32 +1537,34 @@ table {
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsMobileStatusPuller.pull_callback">
-    <p>def <span class="ident">pull_callback</span>(</p><p>self, nation_code, mobile, begin_time, end_time, max_num)</p>
+    <p>def <span class="ident">pull_callback</span>(</p><p>self, nationcode, mobile, begin_time, end_time, max_num, url=None)</p>
     </div>
     
 
     
   
     <div class="desc"><p>Pull callback SMS message status for single mobile.</p>
-<p>:param nation_code: nation dialing code, e.g. China is 86, USA is 1
+<p>:param nationcode: nation dialing code, e.g. China is 86, USA is 1
 :param mobile: mobile number
 :param begin_time: begin time, unix timestamp
 :param end_time: end time, unix timestamp
-:param max_num: maximum number of message status</p></div>
+:param max_num: maximum number of message status
+:param url: custom url</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsMobileStatusPuller.pull_callback', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsMobileStatusPuller.pull_callback" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
-                  <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
+                  <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Pull callback SMS message status for single mobile.</span>
-<span class="sd">    :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">    :param mobile: mobile number</span>
 <span class="sd">    :param begin_time: begin time, unix timestamp</span>
 <span class="sd">    :param end_time: end time, unix timestamp</span>
 <span class="sd">    :param max_num: maximum number of message status</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
-                      <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
+                      <span class="n">begin_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1558,32 +1575,34 @@ table {
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsMobileStatusPuller.pull_reply">
-    <p>def <span class="ident">pull_reply</span>(</p><p>self, nation_code, mobile, begin_time, end_time, max_num)</p>
+    <p>def <span class="ident">pull_reply</span>(</p><p>self, nationcode, mobile, begin_time, end_time, max_num, url=None)</p>
     </div>
     
 
     
   
     <div class="desc"><p>Pull reply SMS message status for single mobile.</p>
-<p>:param nation_code: nation dialing code, e.g. China is 86, USA is 1
+<p>:param nationcode: nation dialing code, e.g. China is 86, USA is 1
 :param mobile: mobile number
 :param begin_time: begin time, unix timestamp
 :param end_time: end time, unix timestamp
-:param max_num: maximum number of message status</p></div>
+:param max_num: maximum number of message status
+:param url: custom url</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsMobileStatusPuller.pull_reply', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsMobileStatusPuller.pull_reply" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
-               <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span> <span class="n">begin_time</span><span class="p">,</span>
+               <span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Pull reply SMS message status for single mobile.</span>
-<span class="sd">    :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">    :param mobile: mobile number</span>
 <span class="sd">    :param begin_time: begin time, unix timestamp</span>
 <span class="sd">    :param end_time: end time, unix timestamp</span>
 <span class="sd">    :param max_num: maximum number of message status</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
-                      <span class="n">begin_time</span><span class="p">,</span><span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">mobile</span><span class="p">,</span>
+                      <span class="n">begin_time</span><span class="p">,</span><span class="n">end_time</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1603,32 +1622,34 @@ table {
   <div id="source-qcloudsms_py.sms.SmsMultiSender" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SmsMultiSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/sendmultisms2&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
-             <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+             <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a SMS messages to multiple phones at once.</span>
 
 <span class="sd">        :param number: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param phone_numbers: phone number array</span>
 <span class="sd">        :param msg: SMS message content</span>
 <span class="sd">        :param extend: extend field, default is empty string</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nation_code</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nationcode</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
                         <span class="k">for</span> <span class="n">pn</span> <span class="ow">in</span> <span class="n">phone_numbers</span><span class="p">],</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sms_type</span><span class="p">),</span>
                 <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
@@ -1637,36 +1658,35 @@ table {
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
-                        <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
+                        <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Send a SMS messages with template parameters to multiple</span>
 <span class="sd">        phones at once.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param phone_numbers: multiple phone numbers</span>
 <span class="sd">        :param template_id: template id</span>
 <span class="sd">        :param params: template parameters</span>
 <span class="sd">        :param sign: Sms user sign</span>
 <span class="sd">        :param extend: extend field, default is empty string</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nation_code</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nationcode</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
                         <span class="k">for</span> <span class="n">pn</span> <span class="ow">in</span> <span class="n">phone_numbers</span><span class="p">],</span>
                 <span class="s2">&quot;sign&quot;</span><span class="p">:</span> <span class="n">sign</span><span class="p">,</span>
                 <span class="s2">&quot;tpl_id&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">template_id</span><span class="p">),</span>
@@ -1676,11 +1696,9 @@ table {
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1697,7 +1715,7 @@ table {
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsMultiSender.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
     </div>
     
 
@@ -1706,10 +1724,11 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsMultiSender.__init__', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsMultiSender.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/sendmultisms2&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 </pre></div>
 
   </div>
@@ -1720,7 +1739,7 @@ table {
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsMultiSender.send">
-    <p>def <span class="ident">send</span>(</p><p>self, sms_type, nation_code, phone_numbers, msg, extend=&#39;&#39;, ext=&#39;&#39;)</p>
+    <p>def <span class="ident">send</span>(</p><p>self, sms_type, nationcode, phone_numbers, msg, extend=&#39;&#39;, ext=&#39;&#39;, url=None)</p>
     </div>
     
 
@@ -1728,34 +1747,36 @@ table {
   
     <div class="desc"><p>Send a SMS messages to multiple phones at once.</p>
 <p>:param number: SMS message type, Enum{0: normal SMS, 1: marketing SMS}
-:param nation_code: nation dialing code, e.g. China is 86, USA is 1
+:param nationcode: nation dialing code, e.g. China is 86, USA is 1
 :param phone_numbers: phone number array
 :param msg: SMS message content
 :param extend: extend field, default is empty string
-:param ext: ext field, content will be returned by server as it is</p></div>
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsMultiSender.send', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsMultiSender.send" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
-         <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+         <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Send a SMS messages to multiple phones at once.</span>
 <span class="sd">    :param number: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
-<span class="sd">    :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">    :param phone_numbers: phone number array</span>
 <span class="sd">    :param msg: SMS message content</span>
 <span class="sd">    :param extend: extend field, default is empty string</span>
 <span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
     <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
         <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
         <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-        <span class="n">body</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nation_code</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nationcode</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
                     <span class="k">for</span> <span class="n">pn</span> <span class="ow">in</span> <span class="n">phone_numbers</span><span class="p">],</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sms_type</span><span class="p">),</span>
             <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
@@ -1764,11 +1785,9 @@ table {
             <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
             <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
             <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-        <span class="p">},</span>
-        <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-        <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+        <span class="p">})</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1779,7 +1798,7 @@ table {
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsMultiSender.send_with_param">
-    <p>def <span class="ident">send_with_param</span>(</p><p>self, nation_code, phone_numbers, template_id, params, sign=&#39;&#39;, extend=&#39;&#39;, ext=&#39;&#39;)</p>
+    <p>def <span class="ident">send_with_param</span>(</p><p>self, nationcode, phone_numbers, template_id, params, sign=&#39;&#39;, extend=&#39;&#39;, ext=&#39;&#39;, url=None)</p>
     </div>
     
 
@@ -1787,39 +1806,41 @@ table {
   
     <div class="desc"><p>Send a SMS messages with template parameters to multiple
 phones at once.</p>
-<p>:param nation_code: nation dialing code, e.g. China is 86, USA is 1
+<p>:param nationcode: nation dialing code, e.g. China is 86, USA is 1
 :param phone_numbers: multiple phone numbers
 :param template_id: template id
 :param params: template parameters
 :param sign: Sms user sign
 :param extend: extend field, default is empty string
-:param ext: ext field, content will be returned by server as it is</p></div>
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsMultiSender.send_with_param', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsMultiSender.send_with_param" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
-                    <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_numbers</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
+                    <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Send a SMS messages with template parameters to multiple</span>
 <span class="sd">    phones at once.</span>
-<span class="sd">    :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">    :param phone_numbers: multiple phone numbers</span>
 <span class="sd">    :param template_id: template id</span>
 <span class="sd">    :param params: template parameters</span>
 <span class="sd">    :param sign: Sms user sign</span>
 <span class="sd">    :param extend: extend field, default is empty string</span>
 <span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
     <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
         <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
         <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-        <span class="n">body</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nation_code</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="n">nationcode</span><span class="p">,</span> <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">pn</span><span class="p">}</span>
                     <span class="k">for</span> <span class="n">pn</span> <span class="ow">in</span> <span class="n">phone_numbers</span><span class="p">],</span>
             <span class="s2">&quot;sign&quot;</span><span class="p">:</span> <span class="n">sign</span><span class="p">,</span>
             <span class="s2">&quot;tpl_id&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">template_id</span><span class="p">),</span>
@@ -1829,11 +1850,9 @@ phones at once.</p>
             <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
             <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
             <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-        <span class="p">},</span>
-        <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-        <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+        <span class="p">})</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1853,33 +1872,35 @@ phones at once.</p>
   <div id="source-qcloudsms_py.sms.SmsSingleSender" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SmsSingleSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/sendsms&quot;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/sendsms&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
-             <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+             <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send single SMS message.</span>
 
 <span class="sd">        :param msg_type: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param phone_number: phone number</span>
 <span class="sd">        :param msg: SMS message content</span>
 <span class="sd">        :param extend: extend field, default is empty string</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                     <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sms_type</span><span class="p">),</span>
@@ -1889,35 +1910,34 @@ phones at once.</p>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
-                        <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
+                        <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send single SMS message with template paramters.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param phone_number: phone number</span>
 <span class="sd">        :param template_id: template id</span>
 <span class="sd">        :param params: template parameters</span>
 <span class="sd">        :param sign: Sms user sign</span>
 <span class="sd">        :param extend: extend field, default is empty string</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                     <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;sign&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">sign</span><span class="p">),</span>
@@ -1928,11 +1948,9 @@ phones at once.</p>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1949,7 +1967,7 @@ phones at once.</p>
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsSingleSender.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
     </div>
     
 
@@ -1958,10 +1976,11 @@ phones at once.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsSingleSender.__init__', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsSingleSender.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/sendsms&quot;</span><span class="p">;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/sendsms&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 </pre></div>
 
   </div>
@@ -1972,7 +1991,7 @@ phones at once.</p>
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsSingleSender.send">
-    <p>def <span class="ident">send</span>(</p><p>self, sms_type, nation_code, phone_number, msg, extend=&#39;&#39;, ext=&#39;&#39;)</p>
+    <p>def <span class="ident">send</span>(</p><p>self, sms_type, nationcode, phone_number, msg, extend=&#39;&#39;, ext=&#39;&#39;, url=None)</p>
     </div>
     
 
@@ -1980,35 +1999,37 @@ phones at once.</p>
   
     <div class="desc"><p>Send single SMS message.</p>
 <p>:param msg_type: SMS message type, Enum{0: normal SMS, 1: marketing SMS}
-:param nation_code: nation dialing code, e.g. China is 86, USA is 1
+:param nationcode: nation dialing code, e.g. China is 86, USA is 1
 :param phone_number: phone number
 :param msg: SMS message content
 :param extend: extend field, default is empty string
-:param ext: ext field, content will be returned by server as it is</p></div>
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsSingleSender.send', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsSingleSender.send" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
-         <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+         <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Send single SMS message.</span>
 <span class="sd">    :param msg_type: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
-<span class="sd">    :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">    :param phone_number: phone number</span>
 <span class="sd">    :param msg: SMS message content</span>
 <span class="sd">    :param extend: extend field, default is empty string</span>
 <span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
     <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
         <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
         <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-        <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
             <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                 <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
             <span class="p">},</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sms_type</span><span class="p">),</span>
@@ -2018,11 +2039,9 @@ phones at once.</p>
             <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
             <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
             <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-        <span class="p">},</span>
-        <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-        <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+        <span class="p">})</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -2033,45 +2052,47 @@ phones at once.</p>
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsSingleSender.send_with_param">
-    <p>def <span class="ident">send_with_param</span>(</p><p>self, nation_code, phone_number, template_id, params, sign=&#39;&#39;, extend=&#39;&#39;, ext=&#39;&#39;)</p>
+    <p>def <span class="ident">send_with_param</span>(</p><p>self, nationcode, phone_number, template_id, params, sign=&#39;&#39;, extend=&#39;&#39;, ext=&#39;&#39;, url=None)</p>
     </div>
     
 
     
   
     <div class="desc"><p>Send single SMS message with template paramters.</p>
-<p>:param nation_code: nation dialing code, e.g. China is 86, USA is 1
+<p>:param nationcode: nation dialing code, e.g. China is 86, USA is 1
 :param phone_number: phone number
 :param template_id: template id
 :param params: template parameters
 :param sign: Sms user sign
 :param extend: extend field, default is empty string
-:param ext: ext field, content will be returned by server as it is</p></div>
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsSingleSender.send_with_param', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsSingleSender.send_with_param" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
-                    <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send_with_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span>
+                    <span class="n">params</span><span class="p">,</span> <span class="n">sign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Send single SMS message with template paramters.</span>
-<span class="sd">    :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">    :param phone_number: phone number</span>
 <span class="sd">    :param template_id: template id</span>
 <span class="sd">    :param params: template parameters</span>
 <span class="sd">    :param sign: Sms user sign</span>
 <span class="sd">    :param extend: extend field, default is empty string</span>
 <span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
     <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
         <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
         <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-        <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
             <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                 <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
             <span class="p">},</span>
             <span class="s2">&quot;sign&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">sign</span><span class="p">),</span>
@@ -2082,11 +2103,9 @@ phones at once.</p>
             <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
             <span class="s2">&quot;extend&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">extend</span><span class="p">),</span>
             <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-        <span class="p">},</span>
-        <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-        <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+        <span class="p">})</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -2106,50 +2125,52 @@ phones at once.</p>
   <div id="source-qcloudsms_py.sms.SmsStatusPuller" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SmsStatusPuller</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/pullstatus&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">_pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sms_type</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull SMS message status.</span>
 
 <span class="sd">        :param msg_type: SMS message type, Enum{0: normal SMS, 1: marketing SMS}</span>
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="k">else</span> <span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">),</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">sms_type</span><span class="p">,</span>
                 <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">max_num</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull callback SMS messages status.</span>
 
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pull reply SMS messages status.</span>
 
 <span class="sd">        :param max_num: maximum number of message status</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -2166,7 +2187,7 @@ phones at once.</p>
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsStatusPuller.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
     </div>
     
 
@@ -2175,10 +2196,11 @@ phones at once.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsStatusPuller.__init__', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsStatusPuller.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlssmssvr/pullstatus&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 </pre></div>
 
   </div>
@@ -2189,22 +2211,24 @@ phones at once.</p>
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsStatusPuller.pull_callback">
-    <p>def <span class="ident">pull_callback</span>(</p><p>self, max_num)</p>
+    <p>def <span class="ident">pull_callback</span>(</p><p>self, max_num, url=None)</p>
     </div>
     
 
     
   
     <div class="desc"><p>Pull callback SMS messages status.</p>
-<p>:param max_num: maximum number of message status</p></div>
+<p>:param max_num: maximum number of message status
+:param url: custom url</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsStatusPuller.pull_callback', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsStatusPuller.pull_callback" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pull_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Pull callback SMS messages status.</span>
 <span class="sd">    :param max_num: maximum number of message status</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -2215,22 +2239,24 @@ phones at once.</p>
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.sms.SmsStatusPuller.pull_reply">
-    <p>def <span class="ident">pull_reply</span>(</p><p>self, max_num)</p>
+    <p>def <span class="ident">pull_reply</span>(</p><p>self, max_num, url=None)</p>
     </div>
     
 
     
   
     <div class="desc"><p>Pull reply SMS messages status.</p>
-<p>:param max_num: maximum number of message status</p></div>
+<p>:param max_num: maximum number of message status
+:param url: custom url</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.sms.SmsStatusPuller.pull_reply', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.sms.SmsStatusPuller.pull_reply" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pull_reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Pull reply SMS messages status.</span>
 <span class="sd">    :param max_num: maximum number of message status</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_num</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pull</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_num</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
 </pre></div>
 
   </div>

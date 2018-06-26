@@ -6,8 +6,9 @@ from __future__ import absolute_import, division, print_function
 import random
 import time
 import hashlib
+import json
 
-from qcloudsms_py.httpclient import HTTPError, http_fetch, utf8
+from qcloudsms_py.httpclient import HTTPError, HTTPSimpleClient, utf8
 
 
 def get_random():
@@ -35,12 +36,37 @@ def calculate_signature(appkey, rand, time, phone_numbers=None):
     return hashlib.sha256(utf8(raw_text)).hexdigest()
 
 
-def api_request(req):
+def calculate_auth(appkey, rand, time, file_sha1sum):
+    """Calculate a auth signature for uploading voice file.
+
+    :param appkey: sdk appkey
+    :param random: random string
+    :param time: unix timestamp time
+    :param file_sha1sum: voice file sha1 sum
+    """
+    raw_text = "appkey={}&random={}&time={}&content-sha1={}".format(
+        appkey, rand, time, file_sha1sum
+    )
+    return hashlib.sha256(utf8(raw_text)).hexdigest()
+
+
+def sha1sum(content):
+    return hashlib.sha1(utf8(content)).hexdigest()
+
+
+_http_simple_client = HTTPSimpleClient()
+
+
+def api_request(req, httpclient=None):
     """Make a API request and return response.
 
     :param req: `qcloudsms_py.httpclient.HTTPRequest` instance
+    :param httpclient: `qcloudsms_py.httpclient.HTTPClientInterface` instance
     """
-    res = http_fetch(req)
+    if httpclient:
+        res = httpclient.fetch(req)
+    else:
+        res = _http_simple_client.fetch(req)
     if not res.ok():
         raise HTTPError(res.code, res.reason)
     return res.json()
