@@ -1045,9 +1045,11 @@ table {
       
   <ul>
     <li class="mono"><a href="#qcloudsms_py.util.api_request">api_request</a></li>
+    <li class="mono"><a href="#qcloudsms_py.util.calculate_auth">calculate_auth</a></li>
     <li class="mono"><a href="#qcloudsms_py.util.calculate_signature">calculate_signature</a></li>
     <li class="mono"><a href="#qcloudsms_py.util.get_current_time">get_current_time</a></li>
     <li class="mono"><a href="#qcloudsms_py.util.get_random">get_random</a></li>
+    <li class="mono"><a href="#qcloudsms_py.util.sha1sum">sha1sum</a></li>
   </ul>
 
     </li>
@@ -1077,8 +1079,9 @@ table {
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
-<span class="kn">from</span> <span class="nn">qcloudsms_py.httpclient</span> <span class="kn">import</span> <span class="n">HTTPError</span><span class="p">,</span> <span class="n">http_fetch</span><span class="p">,</span> <span class="n">utf8</span>
+<span class="kn">from</span> <span class="nn">qcloudsms_py.httpclient</span> <span class="kn">import</span> <span class="n">HTTPError</span><span class="p">,</span> <span class="n">HTTPSimpleClient</span><span class="p">,</span> <span class="n">utf8</span>
 
 
 <span class="k">def</span> <span class="nf">get_random</span><span class="p">():</span>
@@ -1106,12 +1109,37 @@ table {
     <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">utf8</span><span class="p">(</span><span class="n">raw_text</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">calculate_auth</span><span class="p">(</span><span class="n">appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">file_sha1sum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate a auth signature for uploading voice file.</span>
+
+<span class="sd">    :param appkey: sdk appkey</span>
+<span class="sd">    :param random: random string</span>
+<span class="sd">    :param time: unix timestamp time</span>
+<span class="sd">    :param file_sha1sum: voice file sha1 sum</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">raw_text</span> <span class="o">=</span> <span class="s2">&quot;appkey={}&amp;random={}&amp;time={}&amp;content-sha1={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">file_sha1sum</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">utf8</span><span class="p">(</span><span class="n">raw_text</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">sha1sum</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">utf8</span><span class="p">(</span><span class="n">content</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+
+<span class="n">_http_simple_client</span> <span class="o">=</span> <span class="n">HTTPSimpleClient</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Make a API request and return response.</span>
 
 <span class="sd">    :param req: `qcloudsms_py.httpclient.HTTPRequest` instance</span>
+<span class="sd">    :param httpclient: `qcloudsms_py.httpclient.HTTPClientInterface` instance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">http_fetch</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">httpclient</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">httpclient</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">_http_simple_client</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">():</span>
         <span class="k">raise</span> <span class="n">HTTPError</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
@@ -1127,26 +1155,67 @@ table {
       
   <div class="item">
     <div class="name def" id="qcloudsms_py.util.api_request">
-    <p>def <span class="ident">api_request</span>(</p><p>req)</p>
+    <p>def <span class="ident">api_request</span>(</p><p>req, httpclient=None)</p>
     </div>
     
 
     
   
     <div class="desc"><p>Make a API request and return response.</p>
-<p>:param req: <a href="/qcloudsms_py.httpclient.HTTPRequest.ext"><code>qcloudsms_py.httpclient.HTTPRequest</code></a> instance</p></div>
+<p>:param req: <a href="/qcloudsms_py.httpclient.HTTPRequest.ext"><code>qcloudsms_py.httpclient.HTTPRequest</code></a> instance
+:param httpclient: <a href="/qcloudsms_py.httpclient.HTTPClientInterface.ext"><code>qcloudsms_py.httpclient.HTTPClientInterface</code></a> instance</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.util.api_request', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.util.api_request" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Make a API request and return response.</span>
 
 <span class="sd">    :param req: `qcloudsms_py.httpclient.HTTPRequest` instance</span>
+<span class="sd">    :param httpclient: `qcloudsms_py.httpclient.HTTPClientInterface` instance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">http_fetch</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">httpclient</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">httpclient</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">_http_simple_client</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="o">.</span><span class="n">ok</span><span class="p">():</span>
         <span class="k">raise</span> <span class="n">HTTPError</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.util.calculate_auth">
+    <p>def <span class="ident">calculate_auth</span>(</p><p>appkey, rand, time, file_sha1sum)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calculate a auth signature for uploading voice file.</p>
+<p>:param appkey: sdk appkey
+:param random: random string
+:param time: unix timestamp time
+:param file_sha1sum: voice file sha1 sum</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.util.calculate_auth', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.util.calculate_auth" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">calculate_auth</span><span class="p">(</span><span class="n">appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">file_sha1sum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate a auth signature for uploading voice file.</span>
+
+<span class="sd">    :param appkey: sdk appkey</span>
+<span class="sd">    :param random: random string</span>
+<span class="sd">    :param time: unix timestamp time</span>
+<span class="sd">    :param file_sha1sum: voice file sha1 sum</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">raw_text</span> <span class="o">=</span> <span class="s2">&quot;appkey={}&amp;random={}&amp;time={}&amp;content-sha1={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">file_sha1sum</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">utf8</span><span class="p">(</span><span class="n">raw_text</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1230,6 +1299,27 @@ table {
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_random</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Get a random number&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">100000</span><span class="p">,</span> <span class="mi">999999</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.util.sha1sum">
+    <p>def <span class="ident">sha1sum</span>(</p><p>content)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.util.sha1sum', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.util.sha1sum" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">sha1sum</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">utf8</span><span class="p">(</span><span class="n">content</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 </pre></div>
 
   </div>

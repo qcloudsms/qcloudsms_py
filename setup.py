@@ -12,7 +12,7 @@ with codecs.open("README", encoding="utf-8") as f:
 
 setup(
     name="qcloudsms_py",
-    version="0.1.1",
+    version="0.1.3",
     description="qcloudsms python sdk",
     packages=["qcloudsms_py"],
     author="qcloudsms",

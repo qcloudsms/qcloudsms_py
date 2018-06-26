@@ -1044,7 +1044,6 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#qcloudsms_py.httpclient.http_fetch">http_fetch</a></li>
     <li class="mono"><a href="#qcloudsms_py.httpclient.utf8">utf8</a></li>
   </ul>
 
@@ -1052,6 +1051,15 @@ table {
 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#qcloudsms_py.httpclient.HTTPClientInterface">HTTPClientInterface</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#qcloudsms_py.httpclient.HTTPClientInterface.fetch">fetch</a></li>
+  </ul>
+
+        </li>
         <li class="mono">
         <span class="class_name"><a href="#qcloudsms_py.httpclient.HTTPError">HTTPError</a></span>
         
@@ -1081,6 +1089,16 @@ table {
   </ul>
 
         </li>
+        <li class="mono">
+        <span class="class_name"><a href="#qcloudsms_py.httpclient.HTTPSimpleClient">HTTPSimpleClient</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#qcloudsms_py.httpclient.HTTPSimpleClient.__init__">__init__</a></li>
+    <li class="mono"><a href="#qcloudsms_py.httpclient.HTTPSimpleClient.fetch">fetch</a></li>
+  </ul>
+
+        </li>
       </ul>
     </li>
 
@@ -1105,6 +1123,7 @@ table {
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">socket</span>
@@ -1119,8 +1138,7 @@ table {
 
 <span class="k">class</span> <span class="nc">HTTPRequest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                  <span class="n">connect_timeout</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">request_timeout</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
          <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         :param url: HTTP request URL.</span>
 <span class="sd">         :param method:  (optiona) HTTP method.</span>
@@ -1133,13 +1151,12 @@ table {
          <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
          <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span>
          <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">body</span>
-         <span class="bp">self</span><span class="o">.</span><span class="n">connect_timeout</span> <span class="o">=</span> <span class="n">connect_timeout</span>
-         <span class="bp">self</span><span class="o">.</span><span class="n">request_timeout</span> <span class="o">=</span> <span class="n">request_timeout</span>
 
 
 <span class="k">class</span> <span class="nc">HTTPResponse</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span>
+                 <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         :param request: HTTPRequest instance.</span>
 <span class="sd">         :param code:  HTTP status code.</span>
@@ -1160,7 +1177,8 @@ table {
 
     <span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+                              <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 
 
@@ -1201,49 +1219,84 @@ table {
     <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 
 
+<span class="k">class</span> <span class="nc">HTTPClientInterface</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-<span class="k">def</span> <span class="nf">http_fetch</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Fetch HTTP response by given HTTP request.</span>
+    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<span class="sd">    :param req: HTTPRequest instance</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">scheme</span> <span class="o">==</span> <span class="s2">&quot;https&quot;</span><span class="p">:</span>
-        <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span>
-            <span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
-            <span class="n">port</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
-            <span class="n">timeout</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">connect_timeout</span>
-        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span>
-            <span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
-            <span class="n">port</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
-            <span class="n">timeout</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">connect_timeout</span>
-        <span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
-            <span class="n">req</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
-            <span class="s2">&quot;{}?{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">query</span><span class="p">),</span>
-            <span class="n">body</span><span class="o">=</span><span class="n">utf8</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">body</span><span class="p">)),</span>
-            <span class="n">headers</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">headers</span>
-        <span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">HTTPResponse</span><span class="p">(</span>
-            <span class="n">request</span><span class="o">=</span><span class="n">req</span><span class="p">,</span>
-            <span class="n">code</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
-            <span class="n">body</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
-            <span class="n">headers</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">getheaders</span><span class="p">()),</span>
-            <span class="n">reason</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">reason</span>
-        <span class="p">)</span>
-    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">gaierror</span><span class="p">:</span>
-        <span class="c1"># client network error, raise</span>
-        <span class="k">raise</span>
-    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-        <span class="c1"># client network error, raise</span>
-        <span class="k">raise</span>
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">res</span>
+
+<span class="k">class</span> <span class="nc">HTTPSimpleClient</span><span class="p">(</span><span class="n">HTTPClientInterface</span><span class="p">):</span>
+
+    <span class="n">PATTERN</span> <span class="o">=</span> <span class="s2">&quot;(?:http.*://)?(?P&lt;host&gt;[^:/ ]+).?(?P&lt;port&gt;[0-9]*).*&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                 <span class="n">proxy</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_timeout</span> <span class="o">=</span> <span class="n">connect_timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_request_timeout</span> <span class="o">=</span> <span class="n">request_timeout</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="p">(</span><span class="n">proxy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">proxy</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">unicode_type</span><span class="p">)):</span>
+            <span class="n">proxy</span> <span class="o">=</span> <span class="n">utf8</span><span class="p">(</span><span class="n">proxy</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PATTERN</span><span class="p">,</span> <span class="n">proxy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid proxy&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;host&quot;</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">))</span> <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">80</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">proxy</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid proxy&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span><span class="p">:</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">scheme</span> <span class="o">==</span> <span class="s2">&quot;https&quot;</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span>
+                <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_connect_timeout</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span>
+                <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_connect_timeout</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">set_tunnel</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+
+        <span class="c1"># Send request</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+                <span class="n">req</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+                <span class="s2">&quot;{}?{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">query</span><span class="p">),</span>
+                <span class="n">body</span><span class="o">=</span><span class="n">utf8</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">body</span><span class="p">),</span>
+                <span class="n">headers</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">headers</span>
+            <span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">HTTPResponse</span><span class="p">(</span>
+                <span class="n">request</span><span class="o">=</span><span class="n">req</span><span class="p">,</span>
+                <span class="n">code</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+                <span class="n">body</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+                <span class="n">headers</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">getheaders</span><span class="p">()),</span>
+                <span class="n">reason</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">reason</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">gaierror</span><span class="p">:</span>
+            <span class="c1"># client network error, raise</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="c1"># client network error, raise</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
 </pre></div>
 
   </div>
@@ -1253,69 +1306,6 @@ table {
   <section id="section-items">
 
     <h2 class="section-title" id="header-functions">Functions</h2>
-      
-  <div class="item">
-    <div class="name def" id="qcloudsms_py.httpclient.http_fetch">
-    <p>def <span class="ident">http_fetch</span>(</p><p>req)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Fetch HTTP response by given HTTP request.</p>
-<p>:param req: HTTPRequest instance</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.httpclient.http_fetch', this);">Show source &equiv;</a></p>
-  <div id="source-qcloudsms_py.httpclient.http_fetch" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">http_fetch</span><span class="p">(</span><span class="n">req</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Fetch HTTP response by given HTTP request.</span>
-
-<span class="sd">    :param req: HTTPRequest instance</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">scheme</span> <span class="o">==</span> <span class="s2">&quot;https&quot;</span><span class="p">:</span>
-        <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span>
-            <span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
-            <span class="n">port</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
-            <span class="n">timeout</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">connect_timeout</span>
-        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span>
-            <span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span>
-            <span class="n">port</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
-            <span class="n">timeout</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">connect_timeout</span>
-        <span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
-            <span class="n">req</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
-            <span class="s2">&quot;{}?{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">query</span><span class="p">),</span>
-            <span class="n">body</span><span class="o">=</span><span class="n">utf8</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">body</span><span class="p">)),</span>
-            <span class="n">headers</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">headers</span>
-        <span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">HTTPResponse</span><span class="p">(</span>
-            <span class="n">request</span><span class="o">=</span><span class="n">req</span><span class="p">,</span>
-            <span class="n">code</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
-            <span class="n">body</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
-            <span class="n">headers</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">getheaders</span><span class="p">()),</span>
-            <span class="n">reason</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">reason</span>
-        <span class="p">)</span>
-    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">gaierror</span><span class="p">:</span>
-        <span class="c1"># client network error, raise</span>
-        <span class="k">raise</span>
-    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-        <span class="c1"># client network error, raise</span>
-        <span class="k">raise</span>
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">res</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
       
   <div class="item">
     <div class="name def" id="qcloudsms_py.httpclient.utf8">
@@ -1360,6 +1350,54 @@ as utf8.</p>
   
 
     <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="qcloudsms_py.httpclient.HTTPClientInterface" class="name">class <span class="ident">HTTPClientInterface</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.httpclient.HTTPClientInterface', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.httpclient.HTTPClientInterface" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">HTTPClientInterface</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#qcloudsms_py.httpclient.HTTPClientInterface">HTTPClientInterface</a></li>
+          <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
+          </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.httpclient.HTTPClientInterface.fetch">
+    <p>def <span class="ident">fetch</span>(</p><p>self, req)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.httpclient.HTTPClientInterface.fetch', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.httpclient.HTTPClientInterface.fetch" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
       
       <div class="item">
       <p id="qcloudsms_py.httpclient.HTTPError" class="name">class <span class="ident">HTTPError</span></p>
@@ -1470,8 +1508,7 @@ as utf8.</p>
   <div id="source-qcloudsms_py.httpclient.HTTPRequest" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">HTTPRequest</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                  <span class="n">connect_timeout</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">request_timeout</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
          <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         :param url: HTTP request URL.</span>
 <span class="sd">         :param method:  (optiona) HTTP method.</span>
@@ -1484,8 +1521,6 @@ as utf8.</p>
          <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
          <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span>
          <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">body</span>
-         <span class="bp">self</span><span class="o">.</span><span class="n">connect_timeout</span> <span class="o">=</span> <span class="n">connect_timeout</span>
-         <span class="bp">self</span><span class="o">.</span><span class="n">request_timeout</span> <span class="o">=</span> <span class="n">request_timeout</span>
 </pre></div>
 
   </div>
@@ -1501,16 +1536,6 @@ as utf8.</p>
           <h3>Instance variables</h3>
             <div class="item">
             <p id="qcloudsms_py.httpclient.HTTPRequest.body" class="name">var <span class="ident">body</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="qcloudsms_py.httpclient.HTTPRequest.connect_timeout" class="name">var <span class="ident">connect_timeout</span></p>
             
 
             
@@ -1540,16 +1565,6 @@ as utf8.</p>
 
             </div>
             <div class="item">
-            <p id="qcloudsms_py.httpclient.HTTPRequest.request_timeout" class="name">var <span class="ident">request_timeout</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
             <p id="qcloudsms_py.httpclient.HTTPRequest.url" class="name">var <span class="ident">url</span></p>
             
 
@@ -1563,7 +1578,7 @@ as utf8.</p>
             
   <div class="item">
     <div class="name def" id="qcloudsms_py.httpclient.HTTPRequest.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, url, method=&#39;GET&#39;, headers=None, body=None, connect_timeout=None, request_timeout=None)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, url, method=&#39;GET&#39;, headers=None, body=None)</p>
     </div>
     
 
@@ -1578,8 +1593,7 @@ as utf8.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.httpclient.HTTPRequest.__init__', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.httpclient.HTTPRequest.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-             <span class="n">connect_timeout</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">request_timeout</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    :param url: HTTP request URL.</span>
 <span class="sd">    :param method:  (optiona) HTTP method.</span>
@@ -1592,8 +1606,6 @@ as utf8.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">body</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">connect_timeout</span> <span class="o">=</span> <span class="n">connect_timeout</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">request_timeout</span> <span class="o">=</span> <span class="n">request_timeout</span>
 </pre></div>
 
   </div>
@@ -1613,7 +1625,8 @@ as utf8.</p>
   <div id="source-qcloudsms_py.httpclient.HTTPResponse" class="source">
     <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">HTTPResponse</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span>
+                 <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         :param request: HTTPRequest instance.</span>
 <span class="sd">         :param code:  HTTP status code.</span>
@@ -1634,7 +1647,8 @@ as utf8.</p>
 
     <span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+                              <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 </pre></div>
 
@@ -1717,7 +1731,8 @@ as utf8.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.httpclient.HTTPResponse.__init__', this);">Show source &equiv;</a></p>
   <div id="source-qcloudsms_py.httpclient.HTTPResponse.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">body</span><span class="p">,</span>
+             <span class="n">headers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">     :param request: HTTPRequest instance.</span>
 <span class="sd">     :param code:  HTTP status code.</span>
@@ -1751,7 +1766,8 @@ as utf8.</p>
   <div id="source-qcloudsms_py.httpclient.HTTPResponse.json" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">)</span> <span class="ow">and</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+                          <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf=8&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 </pre></div>
 
@@ -1776,6 +1792,219 @@ as utf8.</p>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">==</span> <span class="s2">&quot;200&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">True</span>
     <span class="k">return</span> <span class="bp">False</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="qcloudsms_py.httpclient.HTTPSimpleClient" class="name">class <span class="ident">HTTPSimpleClient</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.httpclient.HTTPSimpleClient', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.httpclient.HTTPSimpleClient" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">HTTPSimpleClient</span><span class="p">(</span><span class="n">HTTPClientInterface</span><span class="p">):</span>
+
+    <span class="n">PATTERN</span> <span class="o">=</span> <span class="s2">&quot;(?:http.*://)?(?P&lt;host&gt;[^:/ ]+).?(?P&lt;port&gt;[0-9]*).*&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+                 <span class="n">proxy</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connect_timeout</span> <span class="o">=</span> <span class="n">connect_timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_request_timeout</span> <span class="o">=</span> <span class="n">request_timeout</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="p">(</span><span class="n">proxy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">proxy</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">unicode_type</span><span class="p">)):</span>
+            <span class="n">proxy</span> <span class="o">=</span> <span class="n">utf8</span><span class="p">(</span><span class="n">proxy</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PATTERN</span><span class="p">,</span> <span class="n">proxy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid proxy&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;host&quot;</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">))</span> <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">80</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">proxy</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid proxy&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span><span class="p">:</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">scheme</span> <span class="o">==</span> <span class="s2">&quot;https&quot;</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span>
+                <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_connect_timeout</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span>
+                <span class="n">host</span><span class="p">,</span>
+                <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_connect_timeout</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">set_tunnel</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+
+        <span class="c1"># Send request</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+                <span class="n">req</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+                <span class="s2">&quot;{}?{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">query</span><span class="p">),</span>
+                <span class="n">body</span><span class="o">=</span><span class="n">utf8</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">body</span><span class="p">),</span>
+                <span class="n">headers</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">headers</span>
+            <span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">HTTPResponse</span><span class="p">(</span>
+                <span class="n">request</span><span class="o">=</span><span class="n">req</span><span class="p">,</span>
+                <span class="n">code</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+                <span class="n">body</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+                <span class="n">headers</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">getheaders</span><span class="p">()),</span>
+                <span class="n">reason</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">reason</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">gaierror</span><span class="p">:</span>
+            <span class="c1"># client network error, raise</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="c1"># client network error, raise</span>
+            <span class="k">raise</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#qcloudsms_py.httpclient.HTTPSimpleClient">HTTPSimpleClient</a></li>
+          <li><a href="#qcloudsms_py.httpclient.HTTPClientInterface">HTTPClientInterface</a></li>
+          <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="qcloudsms_py.httpclient.HTTPSimpleClient.PATTERN" class="name">var <span class="ident">PATTERN</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.httpclient.HTTPSimpleClient.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, connect_timeout=60, request_timeout=60, proxy=None)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.httpclient.HTTPSimpleClient.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.httpclient.HTTPSimpleClient.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+             <span class="n">proxy</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_connect_timeout</span> <span class="o">=</span> <span class="n">connect_timeout</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_request_timeout</span> <span class="o">=</span> <span class="n">request_timeout</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="p">(</span><span class="n">proxy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">proxy</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">proxy</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">unicode_type</span><span class="p">)):</span>
+        <span class="n">proxy</span> <span class="o">=</span> <span class="n">utf8</span><span class="p">(</span><span class="n">proxy</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">PATTERN</span><span class="p">,</span> <span class="n">proxy</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid proxy&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;host&quot;</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">))</span> <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">80</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">proxy</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid proxy&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.httpclient.HTTPSimpleClient.fetch">
+    <p>def <span class="ident">fetch</span>(</p><p>self, req)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#qcloudsms_py.httpclient.HTTPClientInterface">HTTPClientInterface</a></code>.<code><a href="#qcloudsms_py.httpclient.HTTPClientInterface.fetch">fetch</a></code>
+    </p>
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.httpclient.HTTPSimpleClient.fetch', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.httpclient.HTTPSimpleClient.fetch" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">urlparse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span><span class="p">:</span>
+        <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">scheme</span> <span class="o">==</span> <span class="s2">&quot;https&quot;</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPSConnection</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_connect_timeout</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span>
+            <span class="n">host</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_connect_timeout</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">set_tunnel</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+    <span class="c1"># Send request</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+            <span class="n">req</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="s2">&quot;{}?{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">query</span><span class="p">),</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">utf8</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">body</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">req</span><span class="o">.</span><span class="n">headers</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">HTTPResponse</span><span class="p">(</span>
+            <span class="n">request</span><span class="o">=</span><span class="n">req</span><span class="p">,</span>
+            <span class="n">code</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">getheaders</span><span class="p">()),</span>
+            <span class="n">reason</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">reason</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">gaierror</span><span class="p">:</span>
+        <span class="c1"># client network error, raise</span>
+        <span class="k">raise</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="c1"># client network error, raise</span>
+        <span class="k">raise</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">res</span>
 </pre></div>
 
   </div>

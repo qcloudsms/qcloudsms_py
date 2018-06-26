@@ -1050,6 +1050,20 @@ table {
     </li>
 
 
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#qcloudsms_py.QcloudSms">QcloudSms</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#qcloudsms_py.QcloudSms.__init__">__init__</a></li>
+    <li class="mono"><a href="#qcloudsms_py.QcloudSms.new">new</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
@@ -1077,21 +1091,63 @@ table {
   <div id="source-qcloudsms_py" class="source">
     <div class="codehilite"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 
-<span class="kn">from</span> <span class="nn">qcloudsms_py.sms</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">SmsSingleSender</span><span class="p">,</span> <span class="n">SmsMultiSender</span><span class="p">,</span>
-    <span class="n">SmsStatusPuller</span><span class="p">,</span> <span class="n">SmsMobileStatusPuller</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">qcloudsms_py.voice</span> <span class="kn">import</span> <span class="n">SmsVoiceVerifyCodeSender</span><span class="p">,</span> <span class="n">SmsVoicePromptSender</span>
+<span class="kn">from</span> <span class="nn">qcloudsms_py</span> <span class="kn">import</span> <span class="n">sms</span>
+<span class="kn">from</span> <span class="nn">qcloudsms_py</span> <span class="kn">import</span> <span class="n">voice</span>
+<span class="kn">from</span> <span class="nn">qcloudsms_py</span> <span class="kn">import</span> <span class="n">httpclient</span>
+<span class="kn">from</span> <span class="nn">qcloudsms_py.sms</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qcloudsms_py.voice</span> <span class="kn">import</span> <span class="o">*</span>
 
 
 <span class="c1"># human-readable version number</span>
-<span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;0.1.1&quot;</span>
+<span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;0.1.3&quot;</span>
 
 <span class="c1"># three-tuple for programmatic comparison</span>
-<span class="n">version_info</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">version_info</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">QcloudSms</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">SMS_CLASSES</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">sms</span><span class="o">.</span><span class="n">__all__</span><span class="p">])</span>
+    <span class="n">VOICE_CLASSESS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">voice</span><span class="o">.</span><span class="n">__all__</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span> <span class="ow">and</span>
+                <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">VOICE_CLASSESS</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;{} is not in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span><span class="p">:</span>
+            <span class="bp">cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sms</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">voice</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span> <span class="ow">and</span>
+                <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">VOICE_CLASSESS</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;{} is not in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sms</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">voice</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span>
+            <span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1118,6 +1174,158 @@ table {
       </div>
 
 
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="qcloudsms_py.QcloudSms" class="name">class <span class="ident">QcloudSms</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.QcloudSms', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.QcloudSms" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">QcloudSms</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">SMS_CLASSES</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">sms</span><span class="o">.</span><span class="n">__all__</span><span class="p">])</span>
+    <span class="n">VOICE_CLASSESS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="bp">cls</span> <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">voice</span><span class="o">.</span><span class="n">__all__</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span> <span class="ow">and</span>
+                <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">VOICE_CLASSESS</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;{} is not in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span><span class="p">:</span>
+            <span class="bp">cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sms</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">voice</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span> <span class="ow">and</span>
+                <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">VOICE_CLASSESS</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;{} is not in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sms</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">voice</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span>
+            <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#qcloudsms_py.QcloudSms">QcloudSms</a></li>
+          <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="qcloudsms_py.QcloudSms.SMS_CLASSES" class="name">var <span class="ident">SMS_CLASSES</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="qcloudsms_py.QcloudSms.VOICE_CLASSESS" class="name">var <span class="ident">VOICE_CLASSESS</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="qcloudsms_py.QcloudSms.cls" class="name">var <span class="ident">cls</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.QcloudSms.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.QcloudSms.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.QcloudSms.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.QcloudSms.new">
+    <p>def <span class="ident">new</span>(</p><p>self, name)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.QcloudSms.new', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.QcloudSms.new" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span> <span class="ow">and</span>
+            <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">VOICE_CLASSESS</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;{} is not in {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">SMS_CLASSES</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sms</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">voice</span><span class="p">,</span> <span class="n">name</span><span class="p">)(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span>
+        <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
 
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">

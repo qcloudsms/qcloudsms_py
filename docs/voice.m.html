@@ -1045,22 +1045,72 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#qcloudsms_py.voice.SmsVoicePromptSender">SmsVoicePromptSender</a></span>
+        <span class="class_name"><a href="#qcloudsms_py.voice.CodeVoiceSender">CodeVoiceSender</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#qcloudsms_py.voice.SmsVoicePromptSender.__init__">__init__</a></li>
-    <li class="mono"><a href="#qcloudsms_py.voice.SmsVoicePromptSender.send">send</a></li>
+    <li class="mono"><a href="#qcloudsms_py.voice.CodeVoiceSender.__init__">__init__</a></li>
+    <li class="mono"><a href="#qcloudsms_py.voice.CodeVoiceSender.send">send</a></li>
   </ul>
 
         </li>
         <li class="mono">
-        <span class="class_name"><a href="#qcloudsms_py.voice.SmsVoiceVerifyCodeSender">SmsVoiceVerifyCodeSender</a></span>
+        <span class="class_name"><a href="#qcloudsms_py.voice.FileVoiceSender">FileVoiceSender</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#qcloudsms_py.voice.SmsVoiceVerifyCodeSender.__init__">__init__</a></li>
-    <li class="mono"><a href="#qcloudsms_py.voice.SmsVoiceVerifyCodeSender.send">send</a></li>
+    <li class="mono"><a href="#qcloudsms_py.voice.FileVoiceSender.__init__">__init__</a></li>
+    <li class="mono"><a href="#qcloudsms_py.voice.FileVoiceSender.send">send</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#qcloudsms_py.voice.PromptVoiceSender">PromptVoiceSender</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#qcloudsms_py.voice.PromptVoiceSender.__init__">__init__</a></li>
+    <li class="mono"><a href="#qcloudsms_py.voice.PromptVoiceSender.send">send</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#qcloudsms_py.voice.PromptVoiceSender">PromptVoiceSender</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#qcloudsms_py.voice.PromptVoiceSender.__init__">__init__</a></li>
+    <li class="mono"><a href="#qcloudsms_py.voice.PromptVoiceSender.send">send</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#qcloudsms_py.voice.CodeVoiceSender">CodeVoiceSender</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#qcloudsms_py.voice.CodeVoiceSender.__init__">__init__</a></li>
+    <li class="mono"><a href="#qcloudsms_py.voice.CodeVoiceSender.send">send</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#qcloudsms_py.voice.TtsVoiceSender">TtsVoiceSender</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#qcloudsms_py.voice.TtsVoiceSender.__init__">__init__</a></li>
+    <li class="mono"><a href="#qcloudsms_py.voice.TtsVoiceSender.send">send</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#qcloudsms_py.voice.VoiceFileUploader">VoiceFileUploader</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#qcloudsms_py.voice.VoiceFileUploader.__init__">__init__</a></li>
+    <li class="mono"><a href="#qcloudsms_py.voice.VoiceFileUploader.upload">upload</a></li>
   </ul>
 
         </li>
@@ -1094,14 +1144,27 @@ table {
 <span class="kn">from</span> <span class="nn">qcloudsms_py.httpclient</span> <span class="kn">import</span> <span class="n">HTTPRequest</span>
 
 
-<span class="k">class</span> <span class="nc">SmsVoicePromptSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;SmsVoiceVerifyCodeSender&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SmsVoicePromptSender&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;PromptVoiceSender&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CodeVoiceSender&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TtsVoiceSender&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;FileVoiceSender&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;VoiceFileUploader&quot;</span>
+<span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">PromptVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud-test.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">prompttype</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">prompttype</span><span class="p">,</span>
+             <span class="n">msg</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a voice prompt message.</span>
 
 <span class="sd">        :param naction_code: nation dialing code, e.g. China is 86, USA is 1</span>
@@ -1110,18 +1173,19 @@ table {
 <span class="sd">        :param msg: voice prompt message</span>
 <span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                     <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
                 <span class="p">},</span>
                 <span class="s2">&quot;prompttype&quot;</span><span class="p">:</span> <span class="n">prompttype</span><span class="p">,</span>
@@ -1131,54 +1195,189 @@ table {
                     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">SmsVoiceVerifyCodeSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="c1"># For compatibility with old API</span>
+<span class="n">SmsVoicePromptSender</span> <span class="o">=</span> <span class="n">PromptVoiceSender</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">CodeVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlsvoicesvr/sendvoice&quot;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendcvoice&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
-             <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Send a voice verify code message.</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+             <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send code voice.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param phone_number:  phone number</span>
 <span class="sd">        :param msg: voice verify code message</span>
 <span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                     <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
                 <span class="p">},</span>
-                <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="s2">&quot;msg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
                 <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
                 <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+
+<span class="c1"># For compatibility with old API</span>
+<span class="n">SmsVoiceVerifyCodeSender</span> <span class="o">=</span> <span class="n">CodeVoiceSender</span>
+
+
+<span class="k">class</span> <span class="nc">TtsVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendtvoice&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span>
+             <span class="n">nationcode</span><span class="o">=</span><span class="s2">&quot;86&quot;</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send tts voice.</span>
+
+<span class="sd">        :param template_id: template id</span>
+<span class="sd">        :param params: template parameters</span>
+<span class="sd">        :param phone_number: phone number</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                    <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">phone_number</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;tpl_id&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">template_id</span><span class="p">),</span>
+                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+                <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+                <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="n">playtimes</span><span class="p">,</span>
+                <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">FileVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendfvoice&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fid</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">nationcode</span><span class="o">=</span><span class="s2">&quot;86&quot;</span><span class="p">,</span>
+             <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send file voice.</span>
+
+<span class="sd">        :param fid: voice file fid</span>
+<span class="sd">        :param phone_number: phone number</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                    <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">phone_number</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;fid&quot;</span><span class="p">:</span> <span class="n">fid</span><span class="p">,</span>
+                <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+                <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="n">playtimes</span><span class="p">,</span>
+                <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">VoiceFileUploader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">CONTENT_TYPES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;wav&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/wav&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mp3&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/mpeg&quot;</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/uploadvoicefile&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+
+    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_content</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;mp3&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Upload voice file.</span>
+
+<span class="sd">        :param file_content: voice file content</span>
+<span class="sd">        :param content_type: voice file content type</span>
+<span class="sd">        :param url: custom url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">content_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">CONTENT_TYPES</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid content&quot;</span><span class="p">)</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&amp;time={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
+        <span class="n">file_sha1sum</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">sha1sum</span><span class="p">(</span><span class="n">file_content</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">CONTENT_TYPES</span><span class="p">[</span><span class="n">content_type</span><span class="p">],</span>
+                <span class="s2">&quot;x-content-sha1&quot;</span><span class="p">:</span> <span class="n">file_sha1sum</span><span class="p">,</span>
+                <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_auth</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="n">file_sha1sum</span>
+                <span class="p">)</span>
+            <span class="p">},</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">file_content</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1191,54 +1390,53 @@ table {
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="qcloudsms_py.voice.SmsVoicePromptSender" class="name">class <span class="ident">SmsVoicePromptSender</span></p>
+      <p id="qcloudsms_py.voice.CodeVoiceSender" class="name">class <span class="ident">CodeVoiceSender</span></p>
       
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.SmsVoicePromptSender', this);">Show source &equiv;</a></p>
-  <div id="source-qcloudsms_py.voice.SmsVoicePromptSender" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SmsVoicePromptSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.CodeVoiceSender', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.CodeVoiceSender" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">CodeVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendcvoice&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">prompttype</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Send a voice prompt message.</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+             <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send code voice.</span>
 
-<span class="sd">        :param naction_code: nation dialing code, e.g. China is 86, USA is 1</span>
-<span class="sd">        :param phone_number: phone number</span>
-<span class="sd">        :param prompttype: voice prompt type, currently value is 2</span>
-<span class="sd">        :param msg: voice prompt message</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param phone_number:  phone number</span>
+<span class="sd">        :param msg: voice verify code message</span>
 <span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                     <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
                 <span class="p">},</span>
-                <span class="s2">&quot;prompttype&quot;</span><span class="p">:</span> <span class="n">prompttype</span><span class="p">,</span>
-                <span class="s2">&quot;promptfile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
+                <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
                 <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
                 <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1248,26 +1446,27 @@ table {
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#qcloudsms_py.voice.SmsVoicePromptSender">SmsVoicePromptSender</a></li>
+          <li><a href="#qcloudsms_py.voice.CodeVoiceSender">CodeVoiceSender</a></li>
           <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
           </ul>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="qcloudsms_py.voice.SmsVoicePromptSender.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, url=None, httpclient=None)</p>
+    <div class="name def" id="qcloudsms_py.voice.CodeVoiceSender.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
     </div>
     
 
     
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.SmsVoicePromptSender.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-qcloudsms_py.voice.SmsVoicePromptSender.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.CodeVoiceSender.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.CodeVoiceSender.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendcvoice&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 </pre></div>
 
   </div>
@@ -1277,57 +1476,55 @@ table {
   
             
   <div class="item">
-    <div class="name def" id="qcloudsms_py.voice.SmsVoicePromptSender.send">
-    <p>def <span class="ident">send</span>(</p><p>self, nation_code, phone_number, prompttype, msg, playtimes=2, ext=&#39;&#39;)</p>
+    <div class="name def" id="qcloudsms_py.voice.CodeVoiceSender.send">
+    <p>def <span class="ident">send</span>(</p><p>self, nationcode, phone_number, msg, playtimes=2, ext=&#39;&#39;, url=None)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Send a voice prompt message.</p>
-<p>:param naction_code: nation dialing code, e.g. China is 86, USA is 1
-:param phone_number: phone number
-:param prompttype: voice prompt type, currently value is 2
-:param msg: voice prompt message
+    <div class="desc"><p>Send code voice.</p>
+<p>:param nationcode: nation dialing code, e.g. China is 86, USA is 1
+:param phone_number:  phone number
+:param msg: voice verify code message
 :param playtimes: playtimes, optional, max is 3, default is 2
-:param ext: ext field, content will be returned by server as it is</p></div>
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.SmsVoicePromptSender.send', this);">Show source &equiv;</a></p>
-  <div id="source-qcloudsms_py.voice.SmsVoicePromptSender.send" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">prompttype</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Send a voice prompt message.</span>
-<span class="sd">    :param naction_code: nation dialing code, e.g. China is 86, USA is 1</span>
-<span class="sd">    :param phone_number: phone number</span>
-<span class="sd">    :param prompttype: voice prompt type, currently value is 2</span>
-<span class="sd">    :param msg: voice prompt message</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.CodeVoiceSender.send', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.CodeVoiceSender.send" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+         <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Send code voice.</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param phone_number:  phone number</span>
+<span class="sd">    :param msg: voice verify code message</span>
 <span class="sd">    :param playtimes: playtimes, optional, max is 3, default is 2</span>
 <span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
     <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
         <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
         <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-        <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
             <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                 <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
             <span class="p">},</span>
-            <span class="s2">&quot;prompttype&quot;</span><span class="p">:</span> <span class="n">prompttype</span><span class="p">,</span>
-            <span class="s2">&quot;promptfile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
+            <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
             <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
             <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
             <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
             <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-        <span class="p">},</span>
-        <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-        <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+        <span class="p">})</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1339,53 +1536,53 @@ table {
       </div>
       
       <div class="item">
-      <p id="qcloudsms_py.voice.SmsVoiceVerifyCodeSender" class="name">class <span class="ident">SmsVoiceVerifyCodeSender</span></p>
+      <p id="qcloudsms_py.voice.FileVoiceSender" class="name">class <span class="ident">FileVoiceSender</span></p>
       
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.SmsVoiceVerifyCodeSender', this);">Show source &equiv;</a></p>
-  <div id="source-qcloudsms_py.voice.SmsVoiceVerifyCodeSender" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SmsVoiceVerifyCodeSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.FileVoiceSender', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.FileVoiceSender" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">FileVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlsvoicesvr/sendvoice&quot;</span><span class="p">;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendfvoice&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 
-    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
-             <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Send a voice verify code message.</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fid</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">nationcode</span><span class="o">=</span><span class="s2">&quot;86&quot;</span><span class="p">,</span>
+             <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send file voice.</span>
 
-<span class="sd">        :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
-<span class="sd">        :param phone_number:  phone number</span>
-<span class="sd">        :param msg: voice verify code message</span>
+<span class="sd">        :param fid: voice file fid</span>
+<span class="sd">        :param phone_number: phone number</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
 <span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
         <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
         <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-            <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
                 <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
-                    <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                    <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">phone_number</span>
                 <span class="p">},</span>
-                <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="s2">&quot;msg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
+                <span class="s2">&quot;fid&quot;</span><span class="p">:</span> <span class="n">fid</span><span class="p">,</span>
                 <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
                 <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+                <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="n">playtimes</span><span class="p">,</span>
                 <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-            <span class="p">},</span>
-            <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-            <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+            <span class="p">})</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1395,26 +1592,27 @@ table {
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#qcloudsms_py.voice.SmsVoiceVerifyCodeSender">SmsVoiceVerifyCodeSender</a></li>
+          <li><a href="#qcloudsms_py.voice.FileVoiceSender">FileVoiceSender</a></li>
           <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
           </ul>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="qcloudsms_py.voice.SmsVoiceVerifyCodeSender.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey)</p>
+    <div class="name def" id="qcloudsms_py.voice.FileVoiceSender.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
     </div>
     
 
     
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.SmsVoiceVerifyCodeSender.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-qcloudsms_py.voice.SmsVoiceVerifyCodeSender.__init__" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.FileVoiceSender.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.FileVoiceSender.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://yun.tim.qq.com/v5/tlsvoicesvr/sendvoice&quot;</span><span class="p">;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendfvoice&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
 </pre></div>
 
   </div>
@@ -1424,55 +1622,817 @@ table {
   
             
   <div class="item">
-    <div class="name def" id="qcloudsms_py.voice.SmsVoiceVerifyCodeSender.send">
-    <p>def <span class="ident">send</span>(</p><p>self, nation_code, phone_number, msg, playtimes=2, ext=&#39;&#39;)</p>
+    <div class="name def" id="qcloudsms_py.voice.FileVoiceSender.send">
+    <p>def <span class="ident">send</span>(</p><p>self, fid, phone_number, nationcode=&#39;86&#39;, playtimes=2, ext=&#39;&#39;, url=None)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Send a voice verify code message.</p>
-<p>:param nation_code: nation dialing code, e.g. China is 86, USA is 1
-:param phone_number:  phone number
-:param msg: voice verify code message
+    <div class="desc"><p>Send file voice.</p>
+<p>:param fid: voice file fid
+:param phone_number: phone number
+:param nationcode: nation dialing code, e.g. China is 86, USA is 1
 :param playtimes: playtimes, optional, max is 3, default is 2
-:param ext: ext field, content will be returned by server as it is</p></div>
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.SmsVoiceVerifyCodeSender.send', this);">Show source &equiv;</a></p>
-  <div id="source-qcloudsms_py.voice.SmsVoiceVerifyCodeSender.send" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nation_code</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
-         <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Send a voice verify code message.</span>
-<span class="sd">    :param nation_code: nation dialing code, e.g. China is 86, USA is 1</span>
-<span class="sd">    :param phone_number:  phone number</span>
-<span class="sd">    :param msg: voice verify code message</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.FileVoiceSender.send', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.FileVoiceSender.send" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fid</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">nationcode</span><span class="o">=</span><span class="s2">&quot;86&quot;</span><span class="p">,</span>
+         <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Send file voice.</span>
+<span class="sd">    :param fid: voice file fid</span>
+<span class="sd">    :param phone_number: phone number</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
 <span class="sd">    :param playtimes: playtimes, optional, max is 3, default is 2</span>
 <span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
     <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
     <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
         <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
         <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
-        <span class="n">body</span><span class="o">=</span><span class="p">{</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
             <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nation_code</span><span class="p">),</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">phone_number</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;fid&quot;</span><span class="p">:</span> <span class="n">fid</span><span class="p">,</span>
+            <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+            <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="n">playtimes</span><span class="p">,</span>
+            <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+        <span class="p">})</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="qcloudsms_py.voice.PromptVoiceSender" class="name">class <span class="ident">PromptVoiceSender</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.PromptVoiceSender', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.PromptVoiceSender" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">PromptVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud-test.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">prompttype</span><span class="p">,</span>
+             <span class="n">msg</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a voice prompt message.</span>
+
+<span class="sd">        :param naction_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param phone_number: phone number</span>
+<span class="sd">        :param prompttype: voice prompt type, currently value is 2</span>
+<span class="sd">        :param msg: voice prompt message</span>
+<span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                    <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;prompttype&quot;</span><span class="p">:</span> <span class="n">prompttype</span><span class="p">,</span>
+                <span class="s2">&quot;promptfile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
+                <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
+                <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+                <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#qcloudsms_py.voice.PromptVoiceSender">PromptVoiceSender</a></li>
+          <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
+          </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.PromptVoiceSender.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.PromptVoiceSender.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.PromptVoiceSender.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud-test.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.PromptVoiceSender.send">
+    <p>def <span class="ident">send</span>(</p><p>self, nationcode, phone_number, prompttype, msg, playtimes=2, ext=&#39;&#39;, url=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Send a voice prompt message.</p>
+<p>:param naction_code: nation dialing code, e.g. China is 86, USA is 1
+:param phone_number: phone number
+:param prompttype: voice prompt type, currently value is 2
+:param msg: voice prompt message
+:param playtimes: playtimes, optional, max is 3, default is 2
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.PromptVoiceSender.send', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.PromptVoiceSender.send" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">prompttype</span><span class="p">,</span>
+         <span class="n">msg</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Send a voice prompt message.</span>
+<span class="sd">    :param naction_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param phone_number: phone number</span>
+<span class="sd">    :param prompttype: voice prompt type, currently value is 2</span>
+<span class="sd">    :param msg: voice prompt message</span>
+<span class="sd">    :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
                 <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
             <span class="p">},</span>
-            <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="s2">&quot;msg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;prompttype&quot;</span><span class="p">:</span> <span class="n">prompttype</span><span class="p">,</span>
+            <span class="s2">&quot;promptfile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
             <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
             <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
             <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
             <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-        <span class="p">},</span>
-        <span class="n">connect_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-        <span class="n">request_timeout</span><span class="o">=</span><span class="mi">60</span>
+        <span class="p">})</span>
     <span class="p">)</span>
-    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="qcloudsms_py.voice.PromptVoiceSender" class="name">class <span class="ident">SmsVoicePromptSender</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.PromptVoiceSender', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.PromptVoiceSender" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">PromptVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud-test.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">prompttype</span><span class="p">,</span>
+             <span class="n">msg</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a voice prompt message.</span>
+
+<span class="sd">        :param naction_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param phone_number: phone number</span>
+<span class="sd">        :param prompttype: voice prompt type, currently value is 2</span>
+<span class="sd">        :param msg: voice prompt message</span>
+<span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                    <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;prompttype&quot;</span><span class="p">:</span> <span class="n">prompttype</span><span class="p">,</span>
+                <span class="s2">&quot;promptfile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
+                <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
+                <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+                <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#qcloudsms_py.voice.PromptVoiceSender">PromptVoiceSender</a></li>
+          <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
+          </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.PromptVoiceSender.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#qcloudsms_py.voice.PromptVoiceSender">PromptVoiceSender</a></code>.<code><a href="#qcloudsms_py.voice.PromptVoiceSender.__init__">__init__</a></code>
+    </p>
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.PromptVoiceSender.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.PromptVoiceSender.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud-test.tim.qq.com/v5/tlsvoicesvr/sendvoiceprompt&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.PromptVoiceSender.send">
+    <p>def <span class="ident">send</span>(</p><p>self, nationcode, phone_number, prompttype, msg, playtimes=2, ext=&#39;&#39;, url=None)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#qcloudsms_py.voice.PromptVoiceSender">PromptVoiceSender</a></code>.<code><a href="#qcloudsms_py.voice.PromptVoiceSender.send">send</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Send a voice prompt message.</p>
+<p>:param naction_code: nation dialing code, e.g. China is 86, USA is 1
+:param phone_number: phone number
+:param prompttype: voice prompt type, currently value is 2
+:param msg: voice prompt message
+:param playtimes: playtimes, optional, max is 3, default is 2
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.PromptVoiceSender.send', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.PromptVoiceSender.send" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">prompttype</span><span class="p">,</span>
+         <span class="n">msg</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Send a voice prompt message.</span>
+<span class="sd">    :param naction_code: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param phone_number: phone number</span>
+<span class="sd">    :param prompttype: voice prompt type, currently value is 2</span>
+<span class="sd">    :param msg: voice prompt message</span>
+<span class="sd">    :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;prompttype&quot;</span><span class="p">:</span> <span class="n">prompttype</span><span class="p">,</span>
+            <span class="s2">&quot;promptfile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span>
+            <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
+            <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+            <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+        <span class="p">})</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="qcloudsms_py.voice.CodeVoiceSender" class="name">class <span class="ident">SmsVoiceVerifyCodeSender</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.CodeVoiceSender', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.CodeVoiceSender" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">CodeVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendcvoice&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+             <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send code voice.</span>
+
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param phone_number:  phone number</span>
+<span class="sd">        :param msg: voice verify code message</span>
+<span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                    <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
+                <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
+                <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+                <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#qcloudsms_py.voice.CodeVoiceSender">CodeVoiceSender</a></li>
+          <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
+          </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.CodeVoiceSender.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#qcloudsms_py.voice.CodeVoiceSender">CodeVoiceSender</a></code>.<code><a href="#qcloudsms_py.voice.CodeVoiceSender.__init__">__init__</a></code>
+    </p>
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.CodeVoiceSender.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.CodeVoiceSender.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendcvoice&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.CodeVoiceSender.send">
+    <p>def <span class="ident">send</span>(</p><p>self, nationcode, phone_number, msg, playtimes=2, ext=&#39;&#39;, url=None)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#qcloudsms_py.voice.CodeVoiceSender">CodeVoiceSender</a></code>.<code><a href="#qcloudsms_py.voice.CodeVoiceSender.send">send</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Send code voice.</p>
+<p>:param nationcode: nation dialing code, e.g. China is 86, USA is 1
+:param phone_number:  phone number
+:param msg: voice verify code message
+:param playtimes: playtimes, optional, max is 3, default is 2
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.CodeVoiceSender.send', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.CodeVoiceSender.send" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nationcode</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+         <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Send code voice.</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param phone_number:  phone number</span>
+<span class="sd">    :param msg: voice verify code message</span>
+<span class="sd">    :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">phone_number</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
+            <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">playtimes</span><span class="p">),</span>
+            <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+            <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+        <span class="p">})</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="qcloudsms_py.voice.TtsVoiceSender" class="name">class <span class="ident">TtsVoiceSender</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.TtsVoiceSender', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.TtsVoiceSender" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">TtsVoiceSender</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendtvoice&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span>
+             <span class="n">nationcode</span><span class="o">=</span><span class="s2">&quot;86&quot;</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send tts voice.</span>
+
+<span class="sd">        :param template_id: template id</span>
+<span class="sd">        :param params: template parameters</span>
+<span class="sd">        :param phone_number: phone number</span>
+<span class="sd">        :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">        :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">        :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">        :param url: custom url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+                <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                    <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">phone_number</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;tpl_id&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">template_id</span><span class="p">),</span>
+                <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+                <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+                <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+                <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="n">playtimes</span><span class="p">,</span>
+                <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#qcloudsms_py.voice.TtsVoiceSender">TtsVoiceSender</a></li>
+          <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
+          </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.TtsVoiceSender.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.TtsVoiceSender.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.TtsVoiceSender.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/sendtvoice&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.TtsVoiceSender.send">
+    <p>def <span class="ident">send</span>(</p><p>self, template_id, params, phone_number, nationcode=&#39;86&#39;, playtimes=2, ext=&#39;&#39;, url=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Send tts voice.</p>
+<p>:param template_id: template id
+:param params: template parameters
+:param phone_number: phone number
+:param nationcode: nation dialing code, e.g. China is 86, USA is 1
+:param playtimes: playtimes, optional, max is 3, default is 2
+:param ext: ext field, content will be returned by server as it is
+:param url: custom url</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.TtsVoiceSender.send', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.TtsVoiceSender.send" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_id</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">phone_number</span><span class="p">,</span>
+         <span class="n">nationcode</span><span class="o">=</span><span class="s2">&quot;86&quot;</span><span class="p">,</span> <span class="n">playtimes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Send tts voice.</span>
+<span class="sd">    :param template_id: template id</span>
+<span class="sd">    :param params: template parameters</span>
+<span class="sd">    :param phone_number: phone number</span>
+<span class="sd">    :param nationcode: nation dialing code, e.g. China is 86, USA is 1</span>
+<span class="sd">    :param playtimes: playtimes, optional, max is 3, default is 2</span>
+<span class="sd">    :param ext: ext field, content will be returned by server as it is</span>
+<span class="sd">    :param url: custom url</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">)</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s2">&quot;tel&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;nationcode&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">nationcode</span><span class="p">),</span>
+                <span class="s2">&quot;mobile&quot;</span><span class="p">:</span> <span class="n">phone_number</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;tpl_id&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">template_id</span><span class="p">),</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+            <span class="s2">&quot;sig&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_signature</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="p">[</span><span class="n">phone_number</span><span class="p">]),</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+            <span class="s2">&quot;playtimes&quot;</span><span class="p">:</span> <span class="n">playtimes</span><span class="p">,</span>
+            <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+        <span class="p">})</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="qcloudsms_py.voice.VoiceFileUploader" class="name">class <span class="ident">VoiceFileUploader</span></p>
+      
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.VoiceFileUploader', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.VoiceFileUploader" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">VoiceFileUploader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="n">CONTENT_TYPES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;wav&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/wav&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mp3&quot;</span><span class="p">:</span> <span class="s2">&quot;audio/mpeg&quot;</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/uploadvoicefile&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+
+    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_content</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;mp3&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Upload voice file.</span>
+
+<span class="sd">        :param file_content: voice file content</span>
+<span class="sd">        :param content_type: voice file content type</span>
+<span class="sd">        :param url: custom url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">content_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">CONTENT_TYPES</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid content&quot;</span><span class="p">)</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&amp;time={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
+        <span class="n">file_sha1sum</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">sha1sum</span><span class="p">(</span><span class="n">file_content</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">CONTENT_TYPES</span><span class="p">[</span><span class="n">content_type</span><span class="p">],</span>
+                <span class="s2">&quot;x-content-sha1&quot;</span><span class="p">:</span> <span class="n">file_sha1sum</span><span class="p">,</span>
+                <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_auth</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="n">file_sha1sum</span>
+                <span class="p">)</span>
+            <span class="p">},</span>
+            <span class="n">body</span><span class="o">=</span><span class="n">file_content</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#qcloudsms_py.voice.VoiceFileUploader">VoiceFileUploader</a></li>
+          <li><a href="/__builtin__.object.ext">__builtin__.object</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="qcloudsms_py.voice.VoiceFileUploader.CONTENT_TYPES" class="name">var <span class="ident">CONTENT_TYPES</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.VoiceFileUploader.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, appid, appkey, httpclient=None)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.VoiceFileUploader.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.VoiceFileUploader.__init__" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">appid</span><span class="p">,</span> <span class="n">appkey</span><span class="p">,</span> <span class="n">httpclient</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span> <span class="o">=</span> <span class="n">appid</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span> <span class="o">=</span> <span class="n">appkey</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="s2">&quot;https://cloud.tim.qq.com/v5/tlsvoicesvr/uploadvoicefile&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span> <span class="o">=</span> <span class="n">httpclient</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="qcloudsms_py.voice.VoiceFileUploader.upload">
+    <p>def <span class="ident">upload</span>(</p><p>self, file_content, content_type=&#39;mp3&#39;, url=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Upload voice file.</p>
+<p>:param file_content: voice file content
+:param content_type: voice file content type
+:param url: custom url</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qcloudsms_py.voice.VoiceFileUploader.upload', this);">Show source &equiv;</a></p>
+  <div id="source-qcloudsms_py.voice.VoiceFileUploader.upload" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_content</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;mp3&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Upload voice file.</span>
+<span class="sd">    :param file_content: voice file content</span>
+<span class="sd">    :param content_type: voice file content type</span>
+<span class="sd">    :param url: custom url</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">content_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">CONTENT_TYPES</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid content&quot;</span><span class="p">)</span>
+    <span class="n">rand</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_random</span><span class="p">()</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_current_time</span><span class="p">()</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;{}?sdkappid={}&amp;random={}&amp;time={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">url</span> <span class="k">if</span> <span class="n">url</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_appid</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">)</span>
+    <span class="n">file_sha1sum</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">sha1sum</span><span class="p">(</span><span class="n">file_content</span><span class="p">)</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="n">HTTPRequest</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">CONTENT_TYPES</span><span class="p">[</span><span class="n">content_type</span><span class="p">],</span>
+            <span class="s2">&quot;x-content-sha1&quot;</span><span class="p">:</span> <span class="n">file_sha1sum</span><span class="p">,</span>
+            <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="n">util</span><span class="o">.</span><span class="n">calculate_auth</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_appkey</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="n">file_sha1sum</span>
+            <span class="p">)</span>
+        <span class="p">},</span>
+        <span class="n">body</span><span class="o">=</span><span class="n">file_content</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">util</span><span class="o">.</span><span class="n">api_request</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_httpclient</span><span class="p">)</span>
 </pre></div>
 
   </div>
