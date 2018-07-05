@@ -57,9 +57,9 @@
 
 同样短信或语音正文内容`模板`须申请和审核，`模板`可在[短信控制台](https://console.cloud.tencent.com/sms)的相应服务模块`内容配置`中进行申请。
 
-## 安装
+### 安装
 
-### pip
+#### pip
 
 qcloudsms_py采用pip进行安装，要使用qcloudsms功能, 只需要执行:
 
@@ -67,16 +67,22 @@ qcloudsms_py采用pip进行安装，要使用qcloudsms功能, 只需要执行:
 pip install qcloudsms_py
 ```
 
-### 手动
+#### 手动
 
 1. 手动下载或clone最新版本qcloudsms_py代码
 2. 在qcloudsms_py目录运行 `python setup.py install`或直接把qcloudsms_py所在目录加入`sys.path`
 
 > `Note` python2/python3都支持
 
-## 用法
+### 文档
 
-若您对接口存在疑问，可以查阅[API开发指南](https://cloud.tencent.com/document/product/382/5808)、[API文档](https://qcloudsms.github.io/qcloudsms_py/) 和 [错误码](https://cloud.tencent.com/document/product/382/3771)。
+若您对接口存在疑问，可以查阅:
+
+* [API开发指南](https://cloud.tencent.com/document/product/382/5808)
+* [SDK文档](https://qcloudsms.github.io/qcloudsms_py/)
+* [错误码](https://cloud.tencent.com/document/product/382/3771)
+
+### 示例
 
 - **准备必要参数**
 
