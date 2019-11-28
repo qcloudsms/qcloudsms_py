@@ -19,7 +19,6 @@ setup(
     author_email="qcloudsms@gmail.com",
     url="https://gitub.com/qcloudsms/qcloudsms_py",
     license="https://opensource.org/licenses/MIT",
-    long_description=long_description,
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 2.7",
