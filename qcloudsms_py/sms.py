@@ -200,7 +200,7 @@ class SmsStatusPuller(object):
         rand = util.get_random()
         now = util.get_current_time()
         url = "{}?sdkappid={}&random={}".format(
-            url if self._url else url, self._appid, rand)
+            url if url else self._url, self._appid, rand)
         req = HTTPRequest(
             url=url,
             method="POST",
