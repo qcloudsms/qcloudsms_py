@@ -116,7 +116,6 @@ class HTTPSimpleClient(HTTPClientInterface):
         if isinstance(proxy, (list, tuple)):
             self._proxy = (proxy[0], int(proxy[1]))
         elif isinstance(proxy, (bytes, unicode_type)):
-            proxy = utf8(proxy)
             result = re.search(self.__class__.PATTERN, proxy)
             if not result:
                 raise ValueError("invalid proxy")
