@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import, division, print_function
-
+from pydevd_attach_to_process.winappdbg.compat import unicode
 import re
 import json
 import sys
 import socket
+
 
 if sys.version_info >= (3,):
     from http import client as httplib
@@ -18,19 +19,17 @@ else:
 
 class HTTPRequest(object):
 
-     def __init__(self, url, method="GET", headers=None, body=None):
-         """
-         :param url: HTTP request URL.
+    def __init__(self, url, method="GET", headers=None, body=None):
+        """
+         :param url:  HTTP request URL.
          :param method:  (optiona) HTTP method.
          :param headers: (optional) Dictionary for HTTP request headers.
          :param body: (optional) Dictionary for HTTP request body.
-         :param connect_timeout: (optional) HTTP connection timeout.
-         :param request_timeout: (optional) HTTP request timeout.
          """
-         self.url = url
-         self.method = method
-         self.headers = headers
-         self.body = body
+        self.url = url
+        self.method = method
+        self.headers = headers
+        self.body = body
 
 
 class HTTPResponse(object):
@@ -56,10 +55,13 @@ class HTTPResponse(object):
         return False
 
     def json(self):
-        if sys.version_info >= (3, ) and sys.version_info < (3, 6):
+        if (3,) <= sys.version_info < (3, 6):
             return json.loads(self.body.decode("utf-8"),
                               encoding="utf=8")
-        return json.loads(self.body, encoding="utf-8")
+        if sys.version_info >= (3, 9):
+            return json.loads(self.body)
+        else:
+            return json.loads(self.body, encoding="utf-8")
 
 
 class HTTPError(Exception):
@@ -71,6 +73,7 @@ class HTTPError(Exception):
 
     def __str__(self):
         return "HTTP {}: {}".format(self.code, self.reason)
+
     __repr__ = __str__
 
 
@@ -106,7 +109,6 @@ class HTTPClientInterface(object):
 
 
 class HTTPSimpleClient(HTTPClientInterface):
-
     PATTERN = "(?:http.*://)?(?P<host>[^:/ ]+).?(?P<port>[0-9]*).*"
 
     def __init__(self, connect_timeout=60, request_timeout=60,
@@ -149,7 +151,7 @@ class HTTPSimpleClient(HTTPClientInterface):
             )
 
         if self._proxy:
-            conn.set_tunnel(result.hostname, result.port)
+            conn.set_tunnel(str(result.hostname), result.port)
 
         # Send request
         try:
