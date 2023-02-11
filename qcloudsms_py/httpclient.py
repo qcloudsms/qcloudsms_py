@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import, division, print_function
-
+from pydevd_attach_to_process.winappdbg.compat import unicode
 import re
 import json
 import sys
 import socket
 
-from pydevd_attach_to_process.winappdbg.compat import unicode
 
 if sys.version_info >= (3,):
     from http import client as httplib
